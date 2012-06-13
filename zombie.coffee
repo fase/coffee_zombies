@@ -1,6 +1,23 @@
-class Human
+class Card
+  constructor: ->
+
+  @CardTypes : { Keeper : 'Keeper', Creeper : 'Creeper', Goal : 'Goal', Action : 'Action', Rule : 'Rule', Surprise : 'Surprise' }
+
+
+class Friend extends Card
+  CardTypes : @CardTypes
+  cardType : @CardTypes.Keeper
+
   constructor: (name) ->
     @name = name ? 'Some guy'
+
+  isCreeper : (isCreeper) =>
+    if isCreeper
+      @cardType = @CardTypes.Creeper
+    else
+      @cardType = @CardTypes.Keeper
+
+    console.log "Card type set to #{@cardType}"
 
   eat: (food) ->
     food ||= 'a donut'
@@ -18,17 +35,19 @@ class Human
     move ||= 'Chicken Dance'
     console.log "#{@name} dances the #{move}."
 
-class Zombie extends Human
+class Zombie extends Friend
   constructor: (name) ->
-    Human::name = name ? 'A random zombie'
+    Friend::name = name ? 'A random zombie'
+
+  cardType : @CardTypes.Creeper
 
   canDance : true
 
   # override with call to base
   eat: (food) ->
     food ||= 'brain'
-    Human::eat food
-
+    Friend::eat food
+  
   # override with no call to base
   walk: (walks_on) ->
     walks_on ||= 'freeway'
@@ -37,12 +56,12 @@ class Zombie extends Human
   # override with static value
   # Since zombies can't really speak, only allow them to groan.
   say: ->
-    Human::say 'mmmmmmrrrrrrpppphhhh!'
+    Friend::say 'mmmmmmrrrrrrpppphhhh!'
 
   # override with conditional clause
   # Cuz if you dance anything else, they're all gonna laugh at you.
   dance: -> 
-    Human::dance 'Thriller' if @canDance
+    Friend::dance 'Thriller' if @canDance
 
   # extended method
   kill: (weapon) ->
@@ -50,7 +69,9 @@ class Zombie extends Human
     console.log "#{@name} is killed with a #{weapon}."
 
 
-obj = new Human 'Bert'
+obj = new Friend 'Bert'
+obj.isCreeper true
+console.log "#{obj.name} is a #{obj.cardType}"
 obj.eat()
 obj.walk()
 obj.say 'Hola!'
@@ -64,6 +85,7 @@ catch err
 console.log ''
 
 obj = new Zombie 'Larry'
+console.log "#{obj.name} is a #{obj.cardType}"
 obj.eat()
 obj.walk()
 obj.say 'Hola!'
@@ -73,6 +95,7 @@ obj.kill 'chainsaw'
 console.log ''
 
 obj = new Zombie 'Rob' # lolz, Rob Zombie
+console.log "#{obj.name} is a #{obj.cardType}"
 obj.eat 'your leg' # Note that you don't need parenthsis if you're passing a parameter.
                    # Probably b/c Coffee assumes that anything with a param is going to be a method.
 obj.walk()
