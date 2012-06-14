@@ -1,4 +1,4 @@
 coffee_zombies
 ==============
 
-Cuz a mind is a terrible thing to waste.
+Quick sample code for demonstrating object creation & inheritance with CoffeeScript.
